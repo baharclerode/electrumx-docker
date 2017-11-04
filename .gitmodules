@@ -1,0 +1,4 @@
+[submodule "electrumx"]
+	path = electrumx
+	url = https://github.com/kyuupichan/electrumx.git
+	branch = master
