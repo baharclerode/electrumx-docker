@@ -18,5 +18,8 @@ ENV DB_ENGINE=leveldb
 ENV HOST=
 ENV BANNER_FILE=banner.txt
 
+COPY electrumx/* /usr/local/electrumx/
+
 WORKDIR ["/var/lib/electrumx"]
 
+ENTRYPOINT ["python3.6", "/usr/local/electrumx/electrumx_server.py"]
