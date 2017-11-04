@@ -21,6 +21,6 @@ ENV BANNER_FILE=banner.txt
 
 COPY electrumx/* /usr/local/electrumx/
 
-WORKDIR ["/var/lib/electrumx"]
+WORKDIR /var/lib/electrumx
 
-ENTRYPOINT ["python3.6", "/usr/local/electrumx/electrumx_server.py"]
+ENTRYPOINT ["/usr/bin/python3.6", "/usr/local/electrumx/electrumx_server.py"]
