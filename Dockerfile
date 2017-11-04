@@ -5,7 +5,8 @@ RUN apt-get update && \
                        python3.6-dev \
                        python3.6-venv \
                        libleveldb-dev \
-                       python3-pip && \
+                       build-essential && \
+   curl https://bootstrap.pypa.io/get-pip.py | python3.6 && \
    python3.6 -m pip install aiohttp \
                             pylru \
                             plyvel \
