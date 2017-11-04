@@ -9,7 +9,7 @@ node("docker") {
 
     currentBuild.displayName = "${env.BUILD_VERSION}-master-${electrumxHash.take(6)}"
 
-    def electrumxImage = docker.build("docker.dragon.zone:10081/baharclerode/electrumx:${env.BUILD_VERSION}-master-${electrumxHash.take(6)}")
+    def electrumxImage = docker.build("docker.dragon.zone:10081/baharclerode/electrumx:${env.BUILD_NUMBER}-master-${electrumxHash.take(6)}")
 
     electrumxImage.push()
 }
