@@ -4,6 +4,7 @@ RUN apt-get update && \
     apt-get -y install python3.6 \
                        python3.6-dev \
                        python3.6-venv \
+                       libleveldb-dev
                        python3-pip && \
    python3.6 -m pip install aiohttp \
                             pylru \
