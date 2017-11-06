@@ -1,27 +1,22 @@
-FROM ubuntu:zesty
+FROM python:3.6-alpine3.6 AS builder
 
-RUN apt-get update && \
-    apt-get -y install python3.6 \
-                       python3.6-dev \
-                       python3.6-venv \
-                       libleveldb-dev \
-                       build-essential && \
-   curl https://bootstrap.pypa.io/get-pip.py | python3.6 && \
-   python3.6 -m pip install aiohttp \
-                            pylru \
-                            plyvel \
-                            irc \
-                            x11_hash
+RUN apk add --no-cache build-base git
+RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing leveldb-dev
+RUN pip install aiohttp pylru plyvel irc x11_hash
 
-VOLUME ["/var/lib/electrumx"]
-ENV DB_DIRECTORY=/var/lib/electrumx
-ENV ALLOW_ROOT=
-ENV DB_ENGINE=leveldb
-ENV HOST=
-ENV BANNER_FILE=banner.txt
+RUN git clone https://github.com/kyuupichan/electrumx.git /electrumx
+WORKDIR /electrumx/
+ARG revision=master
+RUN git checkout --detach $revision
 
-COPY electrumx/* /usr/local/electrumx/
+FROM python:3.6-alpine3.6
 
-WORKDIR /var/lib/electrumx
+ENV DB_DIRECTORY=/var/lib/electrumx ALLOW_ROOT= DB_ENGINE=leveldb HOST= BANNER_FILE=banner.txt
+VOLUME ["$DB_DIRECTORY"]
+WORKDIR $DB_DIRECTORY
+ENTRYPOINT ["/usr/local/bin/python3.6", "/electrumx/electrumx_server.py"]
 
-ENTRYPOINT ["/usr/bin/python3.6", "/usr/local/electrumx/electrumx_server.py"]
+RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing leveldb
+
+COPY --from=builder /electrumx/ /electrumx/
+COPY --from=builder /usr/local/lib/python3.6/site-packages/ /usr/local/lib/python3.6/site-packages/
