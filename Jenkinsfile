@@ -8,5 +8,5 @@ node("docker") {
 
     currentBuild.displayName = tag
 
-    def electrumxImage = docker.build("docker.dragon.zone:10081/baharclerode/electrumx:${tag}", "--build-arg revision=${revisionSha1}")
+    def electrumxImage = docker.build("docker.dragon.zone:10081/baharclerode/electrumx:${tag}", "--build-arg revision=${revisionSha1} .")
 }
