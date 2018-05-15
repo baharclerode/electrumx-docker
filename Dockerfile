@@ -2,7 +2,7 @@ FROM python:3.6-alpine3.6 AS builder
 
 RUN apk add --no-cache build-base git
 RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing leveldb-dev
-RUN pip install aiohttp pylru plyvel irc x11_hash
+RUN pip install aiohttp aiorpcx pylru plyvel irc x11_hash
 
 RUN git clone https://github.com/kyuupichan/electrumx.git /electrumx
 WORKDIR /electrumx/
