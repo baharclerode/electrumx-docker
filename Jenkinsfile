@@ -13,7 +13,7 @@ node("docker") {
         currentBuild.displayName = tag
         
         docker.withRegistry('https://docker.dragon.zone:10080', 'jenkins-nexus') {
-            image = docker.build("docker.dragon.zone:10081/baharclerode/electrumx:${tag}", "--build-arg revision=${revisionSha1} .")
+            image = docker.build("baharclerode/electrumx:${tag}", "--build-arg revision=${revisionSha1} .")
         }
     }
     
