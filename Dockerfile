@@ -6,7 +6,7 @@ RUN pip install aiohttp aiorpcx pylru plyvel irc x11_hash
 
 
 ARG revision=master
-RUN git clone -b $revision https://github.com/kyuupichan/electrumx.git /electrumx
+RUN git clone https://github.com/kyuupichan/electrumx.git /electrumx && git checkout -C /electrumx/ --detach $revision
 WORKDIR /electrumx/
 
 FROM python:3.6-alpine3.6
