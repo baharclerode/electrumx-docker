@@ -16,7 +16,7 @@ FROM python:3.6-alpine3.6
 ENV DB_DIRECTORY=/var/lib/electrumx ALLOW_ROOT=yes DB_ENGINE=leveldb HOST= BANNER_FILE=banner.txt
 VOLUME ["$DB_DIRECTORY"]
 WORKDIR $DB_DIRECTORY
-ENTRYPOINT ["/usr/local/bin/python3.6", "/electrumx/electrumx_server.py"]
+ENTRYPOINT ["/usr/local/bin/python3.6", "/electrumx/electrumx_server"]
 
 RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing leveldb
 
