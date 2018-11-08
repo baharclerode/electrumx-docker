@@ -1,26 +1,35 @@
+
+properties([
+    parameters([
+        string(name: "commit", description: "Commit to build", defaultValue: "")
+    ])
+])
+
 node("docker") {
-    stage("Checkout Sources") {
+
+    stage("Checkout Project") {
         checkout scm
     }
-    
+
     def image
+    def tag
 
     stage("Build Docker Image") {
+        def revision = params.commit ?: sh(returnStdout: true, script: "git ls-remote --heads https://github.com/kyuupichan/electrumx.git ${env.BRANCH_NAME} | cut -f 1").trim()
+        tag = sh(returnStdout: true, script: "git ls-remote --tags https://github.com/kyuupichan/electrumx.git | grep \"${revision}\" | cut -f 2 | cut -d / -f 3").trim()
 
-        def revisionSha1 = sh(returnStdout: true, script: 'git ls-remote --exit-code https://github.com/kyuupichan/electrumx.git refs/heads/master | cut -f 1').trim()
-        def tag = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}-${revisionSha1.take(6)}"
-
-        currentBuild.displayName = tag
-        
         docker.withRegistry('https://docker.dragon.zone:10080', 'jenkins-nexus') {
-            image = docker.build("baharclerode/electrumx:${tag}", "--build-arg revision=${revisionSha1} .")
+            image = docker.build("baharclerode/electrumx:${env.BRANCH_NAME}-${env.BUILD_NUMBER}-${revision.take(6)}", "--build-arg revision=${revision} .")
         }
     }
-    
+
     stage("Push Docker Image") {
         docker.withRegistry('https://docker.dragon.zone:10081', 'jenkins-nexus') {
             image.push()
             image.push(env.BRANCH_NAME)
+            if (tag) {
+                image.push(tag)
+            }
         }
     }
 }
