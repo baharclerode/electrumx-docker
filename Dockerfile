@@ -4,7 +4,7 @@ RUN apk add --no-cache build-base git
 RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing leveldb-dev
 RUN pip install aiohttp aiorpcx>=0.10.1 pylru plyvel irc x11_hash
 
-RUN git clone https://github.com/Electron-Cash/electrumx.git /electrumx
+RUN git clone https://github.com/kyuupichan/electrumx.git /electrumx
 ARG revision=master
 WORKDIR /electrumx/
 RUN git fetch origin
