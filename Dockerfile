@@ -1,4 +1,4 @@
-FROM python:3.6-alpine3.6 AS builder
+FROM python:3.7-alpine3.9 AS builder
 
 RUN apk add --no-cache build-base git
 RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing leveldb-dev
@@ -10,14 +10,14 @@ WORKDIR /electrumx/
 RUN git fetch origin
 RUN git checkout --detach $revision
 
-FROM python:3.6-alpine3.6
+FROM python:3.7-alpine3.9
 
 ENV DB_DIRECTORY=/var/lib/electrumx ALLOW_ROOT=yes DB_ENGINE=leveldb HOST= BANNER_FILE=banner.txt
 VOLUME ["$DB_DIRECTORY"]
 WORKDIR $DB_DIRECTORY
-ENTRYPOINT ["/usr/local/bin/python3.6", "/electrumx/electrumx_server"]
+ENTRYPOINT ["/usr/local/bin/python3.7", "/electrumx/electrumx_server"]
 
 RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing leveldb
 
 COPY --from=builder /electrumx/ /electrumx/
-COPY --from=builder /usr/local/lib/python3.6/site-packages/ /usr/local/lib/python3.6/site-packages/
+COPY --from=builder /usr/local/lib/python3.7/site-packages/ /usr/local/lib/python3.7/site-packages/
